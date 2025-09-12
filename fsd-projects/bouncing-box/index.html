@@ -2,12 +2,22 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Bouncing Box</title>
+    <title>The Taric Bouncing Box</title>
     <script src="jquery.min.js"></script>
     <style>
+      
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background: black;
+        background: url("https://a-static.besthdwallpaper.com/corrupted-taric-league-of-legends-wallpaper-1280x768-103825_13.jpg");
+        background-size: cover;
+      }
+
       .box {
-        width: 70px;
-        height: 70px;
+        height: 60px;
+        width: 60px;
         background-color: teal;
         font-size: 300%;
         text-align: center;
@@ -23,13 +33,13 @@
         height: 100vh;
       }
     </style>
-    <!-- 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
+    <!--  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
   </head>
 
   <body class="board">
     <!-- HTML for the box -->
     <div class="box">?</div>
-
+    
     <script>
       (function () {
         "use strict";
@@ -49,14 +59,18 @@
         });
 
         // Every 50 milliseconds, call the update Function (see below)
-        setInterval(update, 50);
+        var interval = setInterval(update, 50);
+        function endGame() {
+          clearInterval(interval);
+        }
 
         // Every time the box is clicked, call the handleBoxClick Function (see below)
         box.on("click", handleBoxClick);
 
         // moves the Box to a new position on the screen along the X-Axis
-        function moveBoxTo(newPositionX) { 
+        function moveBoxTo(newPositionX, newPositionY) { 
           box.css("left", newPositionX);
+          box.css("top", newPositionY);
         }
 
         // changes the text displayed on the Box
@@ -64,31 +78,36 @@
           box.text(newText);
         }
 
+
         //////////////////////////////////////////////////////////////////
         /////////////////// YOUR CODE BELOW HERE /////////////////////////
         //////////////////////////////////////////////////////////////////
 
         // TODO 2 - Variable declarations
-        var positionX = 0;
+        var boardHeight = jQuery(window).height();
+        var positionX = 10;
         var points = 0;
-        var speed = 10;
-
-
+        var speed = 3;
+        var positionY = 10;
+        var speedY = 3;
+        var colorStr = "rgb(120, 0, 128)";
+        box.css("background-color", colorStr); 
         /**
          * This Function will be called 20 times/second.
          * Each time it is called, it should move the Box to a new location.
          * If the box drifts off the screen, turn it around!
          */
         function update() { 
-         moveBoxTo(positionX);
+         moveBoxTo(positionX, positionY);
          positionX = positionX + speed;
-        if (positionX > boardWidth) {
-          speed = speed * -1;
+         positionY = positionY + speedY;
+        if (positionX > boardWidth - box.width() || positionX < 0) {
+          speed = -speed;
         }
-        else if (positionX < 0) {
-        speed *= -1;
-        }
-
+        
+          if (positionY > boardHeight - box.height() || positionY < 0) {
+            speedY = -speedY;
+          }
           
         }
 
@@ -100,12 +119,19 @@
          * - move the box to the left side of the screen.
          */
         function handleBoxClick() {
-          changeBoxText(points)
           points = points + 1;
-          speed = 3 * points + 10;
+          changeBoxText(points)
+          speed = (speed > 0 ? 1 : -1) * (points + 10);
+          speedY = (speedY > 0 ? 1 : -1) * (points + 10);
 
-
-
+          // Change box color after 3 clicks
+          if (points === 2) {
+          box.css("background-color", "purple");
+          } else if (points === 4) {
+          box.css("background-color", "white");
+          } else if (points === 6) {
+          box.css("background-color", "black");
+          }
         }
 
 
