@@ -1,13 +1,10 @@
 var runLevels = function (window) {
   window.opspark = window.opspark || {};
 
-  var draw = window.opspark.draw;
-  var createjs = window.createjs;
   let currentLevel = 0;
 
   window.opspark.runLevelInGame = function (game) {
     // some useful constants
-    var groundY = game.groundY;
 
     // this data will allow us to define all of the
     // behavior of our game
@@ -18,6 +15,14 @@ var runLevels = function (window) {
 
     // TODOs 5 through 11 go here
     // BEGIN EDITING YOUR CODE HERE
+    var hitZoneSize = 25;
+    var damageFromObstacle = 10;
+    var sawBladeHitZone = game.createObstacle(hitZoneSize, damageFromObstacle);
+    sawBladeHitZone.x = 400;
+    sawBladeHitZone.y = 100;
+    game.addGameItem(sawBladeHitZone);
+    var obstacleImage = draw.bitmap("img/sawblade.png");
+    sawBladeHitZone.addChild(obstacleImage);
 
     
 
